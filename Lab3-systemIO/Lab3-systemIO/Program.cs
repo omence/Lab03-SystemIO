@@ -4,7 +4,10 @@ using System.Linq;
 namespace Lab3_systemIO
 {
     class Program
-    {
+    {   /// <summary>
+    /// calls the interface and creats file to interact with words in game.
+    /// </summary>
+    /// <param name="args"></param>
         static void Main(string[] args)
         {
             string path = "../../../hangman.txt";
@@ -13,6 +16,10 @@ namespace Lab3_systemIO
             UserInterface(path);
         }
 
+        /// <summary>
+        /// allows the user to interact with the game
+        /// </summary>
+        /// <param name="path">is location of file with words for game</param>
         static void UserInterface(string path)
         {
             //interface is running
@@ -27,45 +34,55 @@ namespace Lab3_systemIO
                 Console.WriteLine("2: Delete a word");
                 Console.WriteLine("3: See all words");
                 Console.WriteLine("4: Play Game");
+                Console.WriteLine("5: Exit");
                 try
                 {
+
                     string userSelection = Console.ReadLine();
 
                     int userSelect = Convert.ToInt32(userSelection);
 
-
-                    switch (userSelect)
+                    if (userSelect == 1 || userSelect == 2 || userSelect == 3 || userSelect == 4 || userSelect == 5)
                     {
-                        //if user chooses withdrawal
-                        case 1:
-                            Console.WriteLine("What word would you like to add?");
-                            string userAdd = Console.ReadLine().ToUpper();
-                            AddToFile(path, userAdd);
-                            Console.WriteLine($"Your word was added");
-                            Console.ReadLine();
-                            break;
+                        switch (userSelect)
+                        {
+                            //if user chooses withdrawal
+                            case 1:
+                                Console.WriteLine("What word would you like to add?");
+                                string userAdd = Console.ReadLine().ToUpper();
+                                AddToFile(path, userAdd);
+                                Console.WriteLine($"Your word was added");
+                                Console.ReadLine();
+                                break;
 
-                        case 2:
-                            Console.WriteLine("What word would you like to delete?");
-                            string userDelete = Console.ReadLine().ToUpper();
-                            DeleteFromFile(path, userDelete);
-                            break;
+                            case 2:
+                                Console.WriteLine("What word would you like to delete?");
+                                string userDelete = Console.ReadLine().ToUpper();
+                                DeleteFromFile(path, userDelete);
+                                break;
 
-                        case 3:
-                            ViewAllWords(path);
+                            case 3:
+                                ViewAllWords(path);
 
-                            break;
+                                break;
 
-                        case 4:
-                            Play(path);
-                            break;
-                        
-                        default:
-                            Environment.Exit(0);
-                            break;
+                            case 4:
+                                Play(path);
+                                break;
+
+                            default:
+                                Environment.Exit(0);
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please Choose a valid option, press enter to continue");
+                        Console.ReadLine();
+                        UserInterface(path);
 
                     }
-
                 }
                 catch
                 {
@@ -74,31 +91,62 @@ namespace Lab3_systemIO
             }
         }
 
+        /// <summary>
+        /// creats a txt file to store words from gale
+        /// </summary>
+        /// <param name="path">Location of file</param>
+        /// <returns>string</returns>
         public static string CreateFile(string path)
         {
-            if (File.Exists(path))
+            try
             {
-                return "file exists";
-            }
-            else
-            {
-                using (StreamWriter streamWriter = new StreamWriter(path))
+                if (File.Exists(path))
                 {
-                    streamWriter.WriteLine("DOG");
+                    return "file exists";
                 }
-                return " ";
+                else
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(path))
+                    {
+                        streamWriter.WriteLine("DOG");
+                    }
+                    return " ";
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+
             }
 
         }
 
+        /// <summary>
+        /// Add a word to the txt file, user can add words
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="userAdd">word user wants to add</param>
         static void AddToFile(string path, string userAdd)
         {
-            using (StreamWriter streamWriter = File.AppendText(path))
+            try
             {
-                streamWriter.WriteLine(userAdd);
+                using (StreamWriter streamWriter = File.AppendText(path))
+                {
+                    streamWriter.WriteLine(userAdd);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+
             }
         }
 
+        /// <summary>
+        /// Deletes a word from the txt file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="userDelete">word user wants to delete</param>
         public static void DeleteFromFile(string path, string userDelete)
         {
             try
@@ -157,71 +205,108 @@ namespace Lab3_systemIO
             }
         }
 
+        /// <summary>
+        /// View all the words in the txt file
+        /// </summary>
+        /// <param name="path">location of file</param>
         static void ViewAllWords(string path)
         {
-            string[] lines = File.ReadAllLines(path);
-            for (int i = 0; i < lines.Length; i++)
+            try
             {
-                Console.WriteLine(lines[i]);
+                string[] lines = File.ReadAllLines(path);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    Console.WriteLine(lines[i]);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+
             }
         }
 
+        /// <summary>
+        /// Gets a random word from the txt file 
+        /// </summary>
+        /// <param name="path">location of txt file</param>
+        /// <returns></returns>
         static string GetRandomWord(string path)
         {
-            string[] lines = File.ReadAllLines(path);
-            Random line = new Random();
-            int index = line.Next(lines.Length);
-            return lines[index];
+            try
+            {
+                string[] lines = File.ReadAllLines(path);
+                Random line = new Random();
+                int index = line.Next(lines.Length);
+                return lines[index];
+            }
+            catch (Exception e)
+            {
+                throw e;
+
+            }
         }
 
+        /// <summary>
+        /// all the functionality for the game
+        /// </summary>
+        /// <param name="path">location of file</param>
         static void Play(string path)
         {
-            string word = GetRandomWord(path);
-            string userGuess = " ";
-            string[] renderWord = new string[word.Length];
-
-            for (int i = 0; i < word.Length; i++)
+            try
             {
-                renderWord[i] = " _ ";
-            }
+                string word = GetRandomWord(path);
+                string userGuess = " ";
+                string[] renderWord = new string[word.Length];
 
-            foreach (string l in renderWord)
-            {
-                Console.Write(l);
-            }
-
-            Console.WriteLine();
-
-            bool userWins = false;
-            while (!userWins)
-            {
-                Console.WriteLine("Guess a Letter");
-                string letter = Console.ReadLine();
-
-                if (letter != null && (word.ToLower().Contains(letter.ToLower()) && !userGuess.Contains(letter)))
+                for (int i = 0; i < word.Length; i++)
                 {
-                    for (int i = 0; i < word.Length; i++)
-                    {
-                        if (word[i].ToString().ToLower() == letter)
-                        {
-                            renderWord[i] = letter;
-                            userGuess += letter;
-                        }
-                        else
-                        {
-                            Console.Write(renderWord[i]);
-                        }
-                    }
-
-                    Console.WriteLine($"You Guessed: {userGuess}");
-
-                    if(!renderWord.Contains(" _ "))
-                    {
-                        Console.WriteLine("You Win");
-                        userWins = true;
-                    }
+                    renderWord[i] = " _ ";
                 }
 
+                foreach (string l in renderWord)
+                {
+                    Console.Write(l);
+                }
+
+                Console.WriteLine();
+
+                bool userWins = false;
+                while (!userWins)
+                {
+                    Console.WriteLine("Guess a Letter");
+                    string letter = Console.ReadLine();
+
+                    if (letter != null && (word.ToLower().Contains(letter.ToLower()) && !userGuess.Contains(letter)))
+                    {
+                        for (int i = 0; i < word.Length; i++)
+                        {
+                            if (word[i].ToString().ToLower() == letter)
+                            {
+                                renderWord[i] = letter;
+                                userGuess += letter;
+                            }
+                            else
+                            {
+                                Console.Write(renderWord[i]);
+                            }
+                        }
+
+                        Console.WriteLine($"You Guessed: {userGuess}");
+
+                        if (!renderWord.Contains(" _ "))
+                        {
+                            Console.WriteLine("You Win");
+                            userWins = true;
+                        }
+                    }
+
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
 
             }
         }
