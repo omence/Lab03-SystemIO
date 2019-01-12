@@ -1,5 +1,6 @@
 ﻿using System;
-using System.IO;
+using System.IO
+
 namespace Lab3_systemIO
 {
     class Program
@@ -99,22 +100,20 @@ namespace Lab3_systemIO
 
         static void DeleteFromFile(string path, string userDelete)
         {
+    
             string[] lines = File.ReadAllLines(path);
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (lines[i] == userDelete)
-                {
-                    
-                }
-            }
+            
         }
+
+        
+
 
         static void ViewAllWords(string path)
         {
             string[] lines = File.ReadAllLines(path);
             for (int i = 0; i < lines.Length; i++)
             {
-                Console.WriteLine(lines[i]);
+                Console.WriteLine($"{i}: {lines[i]}");
             }
         }
 
