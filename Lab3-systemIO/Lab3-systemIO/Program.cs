@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO
-
+using System.IO;
+using System.Linq;
 namespace Lab3_systemIO
 {
     class Program
@@ -26,45 +26,46 @@ namespace Lab3_systemIO
                 Console.WriteLine("1: Add a word");
                 Console.WriteLine("2: Delete a word");
                 Console.WriteLine("3: See all words");
+                Console.WriteLine("4: Play Game");
                 try
                 {
                     string userSelection = Console.ReadLine();
 
                     int userSelect = Convert.ToInt32(userSelection);
-                  
-                        
-                        switch (userSelect)
-                        {
-                            //if user chooses withdrawal
-                            case 1:
-                                Console.WriteLine("What word would you like to add?");
-                                string userAdd = Console.ReadLine().ToUpper();
-                                AddToFile(path, userAdd);
-                                Console.WriteLine($"Your word was added");
+
+
+                    switch (userSelect)
+                    {
+                        //if user chooses withdrawal
+                        case 1:
+                            Console.WriteLine("What word would you like to add?");
+                            string userAdd = Console.ReadLine().ToUpper();
+                            AddToFile(path, userAdd);
+                            Console.WriteLine($"Your word was added");
                             Console.ReadLine();
-                                break;
-                          
-                            case 2:
+                            break;
+
+                        case 2:
                             Console.WriteLine("What word would you like to delete?");
                             string userDelete = Console.ReadLine().ToUpper();
                             DeleteFromFile(path, userDelete);
                             break;
 
-                            case 3:
+                        case 3:
                             ViewAllWords(path);
 
                             break;
 
-                            case 4:
-                            GetRandomWord(path);
+                        case 4:
+                            Play(path);
                             break;
-                            ////default
-                            //default:
-                            //    Environment.Exit(0);
-                            //    break;
+                        
+                        default:
+                            Environment.Exit(0);
+                            break;
 
                     }
-                 
+
                 }
                 catch
                 {
@@ -87,7 +88,7 @@ namespace Lab3_systemIO
                 }
                 return " ";
             }
-            
+
         }
 
         static void AddToFile(string path, string userAdd)
@@ -98,31 +99,131 @@ namespace Lab3_systemIO
             }
         }
 
-        static void DeleteFromFile(string path, string userDelete)
+        public static void DeleteFromFile(string path, string userDelete)
         {
-    
-            string[] lines = File.ReadAllLines(path);
-            
+            try
+            {
+                if (userDelete.Length > 0)
+                {
+                    string[] wordsInFile = File.ReadAllLines(path);
+                    foreach (string word in wordsInFile)
+                    {
+                        if (string.Equals(word, userDelete, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            string[] newFileList = new string[wordsInFile.Length - 1];
+                            int counter = 0;
+                            for (int i = 0; i < newFileList.Length; i++)
+                            {
+                                if (userDelete == wordsInFile[counter])
+                                {
+                                    i--;
+                                    counter++;
+                                }
+                                else
+                                {
+                                    newFileList[i] = wordsInFile[counter];
+                                    counter++;
+                                }
+                            }
+
+                            using (StreamWriter streamWriter = new StreamWriter(path))
+                            {
+                                for (int i = 0; i < newFileList.Length; i++)
+                                {
+                                    streamWriter.WriteLine(newFileList[i]);
+                                }
+                            }
+                            Console.WriteLine($"{userDelete} Deleted.");
+                            return;
+                        }
+
+                    }
+                    Console.WriteLine($"{userDelete} does not exist");
+
+                }
+                else
+                {
+                    throw new Exception("Please enter word to be deleted.");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Press Enter to Continue");
+            }
         }
-
-        
-
 
         static void ViewAllWords(string path)
         {
             string[] lines = File.ReadAllLines(path);
             for (int i = 0; i < lines.Length; i++)
             {
-                Console.WriteLine($"{i}: {lines[i]}");
+                Console.WriteLine(lines[i]);
             }
         }
 
-        static void GetRandomWord(string path)
+        static string GetRandomWord(string path)
         {
             string[] lines = File.ReadAllLines(path);
             Random line = new Random();
             int index = line.Next(lines.Length);
-            Console.WriteLine(lines[index]);
+            return lines[index];
+        }
+
+        static void Play(string path)
+        {
+            string word = GetRandomWord(path);
+            string userGuess = " ";
+            string[] renderWord = new string[word.Length];
+
+            for (int i = 0; i < word.Length; i++)
+            {
+                renderWord[i] = " _ ";
+            }
+
+            foreach (string l in renderWord)
+            {
+                Console.Write(l);
+            }
+
+            Console.WriteLine();
+
+            bool userWins = false;
+            while (!userWins)
+            {
+                Console.WriteLine("Guess a Letter");
+                string letter = Console.ReadLine();
+
+                if (letter != null && (word.ToLower().Contains(letter.ToLower()) && !userGuess.Contains(letter)))
+                {
+                    for (int i = 0; i < word.Length; i++)
+                    {
+                        if (word[i].ToString().ToLower() == letter)
+                        {
+                            renderWord[i] = letter;
+                            userGuess += letter;
+                        }
+                        else
+                        {
+                            Console.Write(renderWord[i]);
+                        }
+                    }
+
+                    Console.WriteLine($"You Guessed: {userGuess}");
+
+                    if(!renderWord.Contains(" _ "))
+                    {
+                        Console.WriteLine("You Win");
+                        userWins = true;
+                    }
+                }
+
+
+            }
         }
     }
 }
