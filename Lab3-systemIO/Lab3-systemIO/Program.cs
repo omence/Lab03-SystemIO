@@ -11,7 +11,7 @@ namespace Lab3_systemIO
         static void Main(string[] args)
         {
             string path = "../../../hangman.txt";
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to the word guessing game");
             CreateFile(path);
             UserInterface(path);
         }
@@ -29,7 +29,7 @@ namespace Lab3_systemIO
             //while the interface is runn run this code
             while (running)
             {
-                Console.WriteLine("please choose option 1, 2, or 3");
+                Console.WriteLine("please choose option 1, 2, 3, 4 or 5");
                 Console.WriteLine("1: Add a word");
                 Console.WriteLine("2: Delete a word");
                 Console.WriteLine("3: See all words");
