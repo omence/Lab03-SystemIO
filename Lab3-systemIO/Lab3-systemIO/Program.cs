@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-namespace Lab3_systemIO
+
+namespace Lab3SystemIO
 {
-    class Program
+    public class Program
     {   /// <summary>
     /// calls the interface and creats file to interact with words in game.
     /// </summary>
     /// <param name="args"></param>
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             string path = "../../../hangman.txt";
             Console.WriteLine("Welcome to the word guessing game");
@@ -20,7 +21,7 @@ namespace Lab3_systemIO
         /// allows the user to interact with the game
         /// </summary>
         /// <param name="path">is location of file with words for game</param>
-        static void UserInterface(string path)
+        public static void UserInterface(string path)
         {
             //interface is running
 
@@ -126,7 +127,7 @@ namespace Lab3_systemIO
         /// </summary>
         /// <param name="path"></param>
         /// <param name="userAdd">word user wants to add</param>
-        static void AddToFile(string path, string userAdd)
+        public static void AddToFile(string path, string userAdd)
         {
             try
             {
@@ -155,9 +156,11 @@ namespace Lab3_systemIO
                 {
                     string[] wordsInFile = File.ReadAllLines(path);
                     foreach (string word in wordsInFile)
-                    {
+                    {   
+                        //check if delete word rwuest equals a word in list, and ignores differences in case
                         if (string.Equals(word, userDelete, StringComparison.CurrentCultureIgnoreCase))
                         {
+                            //the new list of words without deleted word
                             string[] newFileList = new string[wordsInFile.Length - 1];
                             int counter = 0;
                             for (int i = 0; i < newFileList.Length; i++)
@@ -173,7 +176,7 @@ namespace Lab3_systemIO
                                     counter++;
                                 }
                             }
-
+                            //this send the new list of words to the txt file
                             using (StreamWriter streamWriter = new StreamWriter(path))
                             {
                                 for (int i = 0; i < newFileList.Length; i++)
@@ -201,7 +204,7 @@ namespace Lab3_systemIO
             }
             finally
             {
-                Console.WriteLine("Press Enter to Continue");
+                Console.WriteLine("Try again");
             }
         }
 
@@ -209,21 +212,25 @@ namespace Lab3_systemIO
         /// View all the words in the txt file
         /// </summary>
         /// <param name="path">location of file</param>
-        static void ViewAllWords(string path)
+        public static string ViewAllWords(string path)
         {
+            //inputs words from list into array and then renders array to console
+            string[] lines = File.ReadAllLines(path);
             try
-            {
-                string[] lines = File.ReadAllLines(path);
+            {   
+                
                 for (int i = 0; i < lines.Length; i++)
                 {
                     Console.WriteLine(lines[i]);
+               
                 }
             }
             catch (Exception e)
             {
                 throw e;
-
+                
             }
+            return lines[0];
         }
 
         /// <summary>
@@ -231,10 +238,10 @@ namespace Lab3_systemIO
         /// </summary>
         /// <param name="path">location of txt file</param>
         /// <returns></returns>
-        static string GetRandomWord(string path)
+        public static string GetRandomWord(string path)
         {
             try
-            {
+            {   //gets randome word from array of words from txt
                 string[] lines = File.ReadAllLines(path);
                 Random line = new Random();
                 int index = line.Next(lines.Length);
@@ -251,10 +258,11 @@ namespace Lab3_systemIO
         /// all the functionality for the game
         /// </summary>
         /// <param name="path">location of file</param>
-        static void Play(string path)
+        public static void Play(string path)
         {
             try
             {
+                //getting word from random method and setting vars for later
                 string word = GetRandomWord(path);
                 string userGuess = " ";
                 string[] renderWord = new string[word.Length];
@@ -274,6 +282,7 @@ namespace Lab3_systemIO
                 bool userWins = false;
                 while (!userWins)
                 {
+                    //logic for determining if user guess is a match
                     Console.WriteLine("Guess a Letter");
                     string letter = Console.ReadLine();
 
