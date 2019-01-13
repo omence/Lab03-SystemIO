@@ -127,7 +127,7 @@ namespace Lab3SystemIO
         /// </summary>
         /// <param name="path"></param>
         /// <param name="userAdd">word user wants to add</param>
-        public static void AddToFile(string path, string userAdd)
+        public static String AddToFile(string path, string userAdd)
         {
             try
             {
@@ -141,6 +141,7 @@ namespace Lab3SystemIO
                 throw e;
 
             }
+            return userAdd;
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace Lab3SystemIO
         /// </summary>
         /// <param name="path"></param>
         /// <param name="userDelete">word user wants to delete</param>
-        public static void DeleteFromFile(string path, string userDelete)
+        public static string DeleteFromFile(string path, string userDelete)
         {
             try
             {
@@ -185,7 +186,7 @@ namespace Lab3SystemIO
                                 }
                             }
                             Console.WriteLine($"{userDelete} Deleted.");
-                            return;
+                            Console.ReadLine();
                         }
 
                     }
@@ -206,6 +207,7 @@ namespace Lab3SystemIO
             {
                 Console.WriteLine("Try again");
             }
+            return userDelete;
         }
 
         /// <summary>
@@ -230,6 +232,8 @@ namespace Lab3SystemIO
                 throw e;
                 
             }
+            Console.WriteLine(lines[0]);
+
             return lines[0];
         }
 

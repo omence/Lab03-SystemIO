@@ -1,0 +1,4 @@
+DOG
+BAG
+CAT
+BUT
