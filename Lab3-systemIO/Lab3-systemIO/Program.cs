@@ -306,10 +306,11 @@ namespace Lab3SystemIO
                         }
 
                         Console.WriteLine($"You Guessed: {userGuess}");
+                        Console.WriteLine();
 
                         if (!renderWord.Contains(" _ "))
                         {
-                            Console.WriteLine("You Win");
+                            Console.WriteLine($"You Win, word was {word}");
                             userWins = true;
                         }
                     }

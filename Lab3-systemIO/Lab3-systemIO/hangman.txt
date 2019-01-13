@@ -1,1 +1,4 @@
 DOG
+FROG
+CAT
+BAG
