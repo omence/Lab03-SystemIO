@@ -1,1 +1,2 @@
-DOG
+GOD
+SNAKE

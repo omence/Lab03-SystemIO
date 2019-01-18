@@ -39,33 +39,24 @@ namespace XUnitTestProject1
         [Fact]
         public void DeleteWordWorks()
         {
-            //arrange
+            ////arrange
             string path = "../../../hangman.txt";
+            string useradd = "BAG";
+            string index = Program.AddToFile(path, useradd);
+
             string[] wordsInFile = File.ReadAllLines(path);
             string userDelete = "BAG";
             
             //act
             Program.DeleteFromFile(path, userDelete);
 
+            string[] newA = File.ReadAllLines(path);
             //assert
-            Assert.DoesNotContain("BAG", wordsInFile);
+            Assert.DoesNotContain(userDelete, newA);
 
         }
 
-        [Fact]
-        public void CheckLetterWorks()
-        {
-            //arrange
-            string path = "../../../hangman.txt";
-            string word = "BUT";
-
-            //act
-            Program.Play(path);
-
-            //assert
-            Assert.Contains("U", word);
-
-        }
+        
 
     }
 }

@@ -186,7 +186,7 @@ namespace Lab3SystemIO
                                 }
                             }
                             Console.WriteLine($"{userDelete} Deleted.");
-                            Console.ReadLine();
+                          
                         }
 
                     }
